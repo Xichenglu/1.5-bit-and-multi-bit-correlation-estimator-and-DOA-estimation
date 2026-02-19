@@ -1,23 +1,28 @@
-# A 1.5-Bit Quantization Demo for DOA Estimation
+# Quantized DOA Estimation Demos (MATLAB)
 
-This repository contains a MATLAB demo implementation of DOA estimation with MUSIC for the **dedicated 1.5-bit quantization scheme**.
+This folder contains two explicitly separated MUSIC pipelines:
 
-> Important: 1.5-bit quantization is not treated as a generic multi-bit setting in this codebase. A separate quantizer function is provided for the ternary output case.
+- `run_music_15bit_demo.m`: dedicated 1.5-bit path.
+- `run_music_multibit_demo.m`: generic multi-bit (`b`-bit) path.
 
-Related paper:
+The two pipelines do not share the same main script and are wired to different quantizer/recovery entries.
 
-> X. Lu, W. Liu, and A. Alomainy, "A 1.5-Bit Quantization Scheme and Its Application to Direction Estimation," *IEEE Transactions on Signal Processing*, 2025.
+## Main scripts
 
-## Project structure
+- `run_music_15bit_demo.m`
+  - Quantizer: `quantize_one_point_five_bit_complex.m`
+  - Correlation recovery: `recover_correlation_15bit.m`
 
-- `run_music_15bit_demo.m` — main demo script (1.5-bit pipeline).
-- `functions/` — helper functions:
-  - `make_one_point_five_bit_quantizer.m`
-  - `quantize_one_point_five_bit_complex.m`
-  - `make_symmetric_quantizer.m` and `quantize_bbit_complex.m` (generic multi-bit utilities)
-  - signal generation, correlation recovery, and MUSIC routines
-- `CITATION.cff` — citation metadata
-- `LICENSE` / `COPYRIGHT` — legal and copyright files
+- `run_music_multibit_demo.m`
+  - Quantizer: `quantize_bbit_complex.m`
+  - Correlation recovery: `recover_correlation_multibit.m`
+
+## Function layout
+
+- `functions/recover_correlation_15bit.m`: 1.5-bit estimator entry.
+- `functions/recover_correlation_multibit.m`: multi-bit estimator entry.
+- `functions/recover_correlation_from_coeff.m`: shared core solver.
+- `functions/recover_correlation_b.m`: backward-compatible wrapper.
 
 ## Requirements
 
@@ -30,15 +35,12 @@ Related paper:
 run_music_15bit_demo
 ```
 
-Tune `SNR_dB`, `lambda`, `theta`, and `Nsnap` in the script for your experiment.
+or
 
+```matlab
+run_music_multibit_demo
+```
 
-## MATLAB code style
+## Reference
 
-- Functions are kept modular and named by purpose (signal generation, quantization, recovery, DOA).
-- The 1.5-bit path is explicitly separated from generic multi-bit utilities.
-- Variable names and comments follow technical-paper style to improve readability and reproduction.
-
-## Citation
-
-If this code helps your research, please cite the paper above. Metadata is provided in `CITATION.cff`.
+X. Lu, W. Liu, and A. Alomainy, "A 1.5-Bit Quantization Scheme and Its Application to Direction Estimation," IEEE Transactions on Signal Processing, 2025.
